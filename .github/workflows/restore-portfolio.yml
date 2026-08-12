@@ -14,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Restore live production source
+      - name: Restore original production source
         run: |
-          curl -fsSL https://poprtfolio-eight.vercel.app/index.html -o index.html
-          curl -fsSL https://poprtfolio-eight.vercel.app/script.js -o script.js
-          curl -fsSL https://poprtfolio-eight.vercel.app/style.css -o style.css
+          curl -fsSL https://poprtfolio-53dvoagxj-iavinaxhs-projects.vercel.app/index.html -o index.html
+          curl -fsSL https://poprtfolio-53dvoagxj-iavinaxhs-projects.vercel.app/script.js -o script.js
+          curl -fsSL https://poprtfolio-53dvoagxj-iavinaxhs-projects.vercel.app/style.css -o style.css
 
           python - <<'PY'
           from pathlib import Path
@@ -27,9 +27,7 @@ jobs:
           s = s.replace('Kanpur, Uttar Pradesh', 'Noida, Uttar Pradesh')
           s = s.replace('B.Tech in Information Technology', 'B.Tech in Computer Science & Engineering')
           s = s.replace('Bachelor of Technology in Information Technology', 'Bachelor of Technology in Computer Science & Engineering')
-          old = '''<div class="stat-box">\n                                <span class="stat-number" data-target="90">90%</span>\n                                <span class="stat-label">Full Stack Integration</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="4">2+</span>\n                                <span class="stat-label">Certifications</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Featured Projects</span>\n                            </div>'''
-          new = '''<div class="stat-box">\n                                <span class="stat-number" data-target="1">1</span>\n                                <span class="stat-label">Current Developer Role</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Certifications</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Featured Projects</span>\n                            </div>'''
-          s = s.replace(old, new)
+          s = s.replace('A passionate Computer Science undergraduate specializing in full-stack web development.', 'A results-driven Software Development Engineer with experience building scalable web applications, integrating RESTful APIs, debugging production systems, and improving software reliability through testing and automation.')
           p.write_text(s, encoding='utf-8')
 
           p = Path('script.js')
