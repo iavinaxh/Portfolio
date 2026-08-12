@@ -13,14 +13,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Restore production source
+      - name: Restore live production source
         run: |
-          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:index.html > index.html
-          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:script.js > script.js
-          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:style.css > style.css
+          curl -fsSL https://poprtfolio-eight.vercel.app/index.html -o index.html
+          curl -fsSL https://poprtfolio-eight.vercel.app/script.js -o script.js
+          curl -fsSL https://poprtfolio-eight.vercel.app/style.css -o style.css
 
           python - <<'PY'
           from pathlib import Path
