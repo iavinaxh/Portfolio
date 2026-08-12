@@ -656,19 +656,18 @@ function initTerminalCLI() {
   * <span class="text-purple">Backend:</span> Node.js, Express.js, FastAPI, RESTful APIs, JWT Authentication
   * <span class="text-purple">AI/GenAI:</span> OpenAI API, Prompt Engineering, AI-based Systems
   * <span class="text-purple">Databases:</span> MySQL, MongoDB
-  * <span class="text-purple">Testing & QA:</span> API Testing, Postman Test Suites, Unit Testing (Jest), Integration Testing
+  * <span class="text-purple">Testing & QA:</span> API Testing, Postman Test Suites, Unit Testing (Jest), Integration Testing, Selenium
   * <span class="text-purple">Tools & Tech:</span> Git, GitHub, Postman, Vercel, VS Code, Razorpay, OOP, Agile, SDLC
         `,
         projects: () => `
 <span class="text-cyan">Featured Software Projects:</span>
   [1] <span class="text-purple">Text-to-Image AI Web Application</span>: React + REST APIs + MongoDB.
   [2] <span class="text-purple">Vehicle Damage Assessment App</span>: Flask + Java/Python + MySQL.
-  [3] <span class="text-purple">Second-Hand Book Store Platform</span>: Agile SDLC + SQL & MongoDB.
   * Hint: scroll down to the Projects section to check out detailed modals!
         `,
         education: () => `
 <span class="text-cyan">Academic History:</span>
-  * <span class="text-purple">B.Tech in Information Technology</span> (CGPA: 7.2/10)
+  * <span class="text-purple">B.Tech in Computer Science & Engineering</span> (CGPA: 7.2/10)
     GLA University, Mathura | 2022 - 2026
     Coursework: Data Structures & Algorithms, Operating Systems, Computer Networks, DBMS, Software Testing
         `,
