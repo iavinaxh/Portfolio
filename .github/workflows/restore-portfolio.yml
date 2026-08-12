@@ -1,0 +1,51 @@
+name: Restore and update portfolio
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore production source
+        run: |
+          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:index.html > index.html
+          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:script.js > script.js
+          git show 584cc6c302bab59682a0528b2b5dbdc6bd92421d:style.css > style.css
+
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('Kanpur, Uttar Pradesh', 'Noida, Uttar Pradesh')
+          s = s.replace('B.Tech in Information Technology', 'B.Tech in Computer Science & Engineering')
+          s = s.replace('Bachelor of Technology in Information Technology', 'Bachelor of Technology in Computer Science & Engineering')
+          old = '''<div class="stat-box">\n                                <span class="stat-number" data-target="90">90%</span>\n                                <span class="stat-label">Full Stack Integration</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="4">2+</span>\n                                <span class="stat-label">Certifications</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Featured Projects</span>\n                            </div>'''
+          new = '''<div class="stat-box">\n                                <span class="stat-number" data-target="1">1</span>\n                                <span class="stat-label">Current Developer Role</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Certifications</span>\n                            </div>\n                            <div class="stat-box">\n                                <span class="stat-number" data-target="2">2</span>\n                                <span class="stat-label">Featured Projects</span>\n                            </div>'''
+          s = s.replace(old, new)
+          p.write_text(s, encoding='utf-8')
+
+          p = Path('script.js')
+          s = p.read_text(encoding='utf-8')
+          s = s.replace('B.Tech in Information Technology', 'B.Tech in Computer Science & Engineering')
+          s = s.replace('Unit Testing (Jest), Integration Testing', 'Unit Testing (Jest), Integration Testing, Selenium')
+          s = s.replace('  [3] <span class="text-purple">Second-Hand Book Store Platform</span>: Agile SDLC + SQL & MongoDB.\n', '')
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit updated portfolio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html script.js style.css
+          git diff --cached --quiet || git commit -m "Update portfolio from latest resume"
+          git push
