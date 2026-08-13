@@ -52,12 +52,12 @@ if('IntersectionObserver' in window){
 
 // ============================================================
 // Contact form
-// Submit to FormSubmit in the background so the visitor stays
-// on the portfolio instead of being redirected to FormSubmit.
+// FormSubmit AJAX keeps the visitor on the portfolio page.
 // ============================================================
 const form = document.getElementById('contact-form');
 const statusEl = document.getElementById('form-status');
 const submitLabel = document.getElementById('submit-label');
+const submitButton = form ? form.querySelector('button[type="submit"]') : null;
 
 if(form){
   form.addEventListener('submit', async (event) => {
@@ -66,33 +66,45 @@ if(form){
     const honey = form.querySelector('input[name="_honey"]');
     if(honey && honey.value) return;
 
-    const submitButton = form.querySelector('button[type="submit"]');
     if(submitButton) submitButton.disabled = true;
     if(submitLabel) submitLabel.textContent = 'Sending…';
-    if(statusEl) statusEl.textContent = 'Sending your message…';
+    if(statusEl){
+      statusEl.textContent = 'Sending your message…';
+      statusEl.className = 'form-status is-sending';
+    }
+
+    const payload = Object.fromEntries(new FormData(form).entries());
 
     try {
-      const response = await fetch(form.action, {
+      const response = await fetch('https://formsubmit.co/ajax/avisingh21122003@gmail.com', {
         method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(payload)
       });
 
-      const contentType = response.headers.get('content-type') || '';
-      const data = contentType.includes('application/json')
-        ? await response.json()
-        : null;
+      const result = await response.json();
 
-      const success = response.ok && (!data || data.success === true || data.success === 'true');
-      if(!success) throw new Error('Form submission failed');
+      if(!response.ok || result.success !== true){
+        throw new Error(result.message || 'Unable to send message');
+      }
 
       form.reset();
-      if(statusEl) statusEl.textContent = 'Message sent successfully. I’ll get back to you soon.';
-    } catch(error) {
-      if(statusEl) statusEl.textContent = 'Something went wrong. Please email me directly instead.';
+      if(submitLabel) submitLabel.textContent = 'Message sent';
+      if(statusEl){
+        statusEl.textContent = 'Thanks! Your message has been sent successfully.';
+        statusEl.className = 'form-status is-success';
+      }
+    } catch(error){
+      if(submitLabel) submitLabel.textContent = 'Send message';
+      if(statusEl){
+        statusEl.textContent = 'Could not send the message. Please try again or email me directly.';
+        statusEl.className = 'form-status is-error';
+      }
     } finally {
       if(submitButton) submitButton.disabled = false;
-      if(submitLabel) submitLabel.textContent = 'Send message';
     }
   });
 }
