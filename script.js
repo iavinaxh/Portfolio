@@ -52,7 +52,8 @@ if('IntersectionObserver' in window){
 
 // ============================================================
 // Contact form
-// FormSubmit AJAX keeps the visitor on the portfolio page.
+// Use FormSubmit's normal POST, then return to this portfolio.
+// This avoids the AJAX request hanging in some browsers/extensions.
 // ============================================================
 const form = document.getElementById('contact-form');
 const statusEl = document.getElementById('form-status');
@@ -60,51 +61,37 @@ const submitLabel = document.getElementById('submit-label');
 const submitButton = form ? form.querySelector('button[type="submit"]') : null;
 
 if(form){
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
+  const params = new URLSearchParams(window.location.search);
 
+  if(params.get('sent') === '1'){
+    if(statusEl){
+      statusEl.textContent = 'Thanks! Your message has been sent successfully.';
+      statusEl.className = 'form-status is-success';
+    }
+    if(submitLabel) submitLabel.textContent = 'Message sent';
+    window.history.replaceState({}, document.title, window.location.pathname + '#contact');
+  }
+
+  form.addEventListener('submit', () => {
     const honey = form.querySelector('input[name="_honey"]');
     if(honey && honey.value) return;
+
+    // FormSubmit redirects back to the portfolio after successful submission.
+    // The ?sent=1 flag lets this page show the success message after returning.
+    let next = form.querySelector('input[name="_next"]');
+    if(!next){
+      next = document.createElement('input');
+      next.type = 'hidden';
+      next.name = '_next';
+      form.appendChild(next);
+    }
+    next.value = window.location.origin + window.location.pathname + '?sent=1#contact';
 
     if(submitButton) submitButton.disabled = true;
     if(submitLabel) submitLabel.textContent = 'Sending…';
     if(statusEl){
       statusEl.textContent = 'Sending your message…';
       statusEl.className = 'form-status is-sending';
-    }
-
-    const payload = Object.fromEntries(new FormData(form).entries());
-
-    try {
-      const response = await fetch('https://formsubmit.co/ajax/avisingh21122003@gmail.com', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await response.json();
-
-      if(!response.ok || result.success !== true){
-        throw new Error(result.message || 'Unable to send message');
-      }
-
-      form.reset();
-      if(submitLabel) submitLabel.textContent = 'Message sent';
-      if(statusEl){
-        statusEl.textContent = 'Thanks! Your message has been sent successfully.';
-        statusEl.className = 'form-status is-success';
-      }
-    } catch(error){
-      if(submitLabel) submitLabel.textContent = 'Send message';
-      if(statusEl){
-        statusEl.textContent = 'Could not send the message. Please try again or email me directly.';
-        statusEl.className = 'form-status is-error';
-      }
-    } finally {
-      if(submitButton) submitButton.disabled = false;
     }
   });
 }
