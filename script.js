@@ -8,7 +8,6 @@ function updateProgress(){
   const height = h.scrollHeight - h.clientHeight;
   const pct = height > 0 ? (scrolled / height) * 100 : 0;
   if(progress) progress.style.width = pct + '%';
-
   const nav = document.getElementById('nav');
   if(nav) nav.classList.toggle('scrolled', scrolled > 8);
 }
@@ -52,37 +51,18 @@ if('IntersectionObserver' in window){
 }
 
 // ============================================================
-// Contact form — progressive enhancement over FormSubmit
+// Contact form
+// FormSubmit handles the POST directly. No fetch/CORS layer.
 // ============================================================
 const form = document.getElementById('contact-form');
 const statusEl = document.getElementById('form-status');
 const submitLabel = document.getElementById('submit-label');
 
 if(form){
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  form.addEventListener('submit', () => {
     const honey = form.querySelector('input[name="_honey"]');
-    if(honey && honey.value){ return; } // bot trap
-
-    submitLabel.textContent = 'Sending…';
-    statusEl.textContent = '';
-
-    try{
-      const res = await fetch(form.action, {
-        method:'POST',
-        body:new FormData(form),
-        headers:{ 'Accept':'application/json' }
-      });
-      if(res.ok){
-        submitLabel.textContent = 'Send message';
-        statusEl.textContent = "Thanks — I'll get back to you soon.";
-        form.reset();
-      } else {
-        throw new Error('Request failed');
-      }
-    } catch(err){
-      submitLabel.textContent = 'Send message';
-      statusEl.textContent = 'Something went wrong — email me directly instead.';
-    }
+    if(honey && honey.value) return;
+    if(submitLabel) submitLabel.textContent = 'Sending…';
+    if(statusEl) statusEl.textContent = 'Sending your message…';
   });
 }
