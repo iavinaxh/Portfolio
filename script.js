@@ -1,58 +1,88 @@
-document.addEventListener('DOMContentLoaded',()=>{
-  const nav=document.getElementById('nav');
-  const progress=document.getElementById('progress');
-  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+// ============================================================
+// Scroll progress bar
+// ============================================================
+const progress = document.getElementById('progress');
+function updateProgress(){
+  const h = document.documentElement;
+  const scrolled = h.scrollTop;
+  const height = h.scrollHeight - h.clientHeight;
+  const pct = height > 0 ? (scrolled / height) * 100 : 0;
+  if(progress) progress.style.width = pct + '%';
 
-  const updateScroll=()=>{
-    const max=document.documentElement.scrollHeight-window.innerHeight;
-    progress.style.width=(max>0?(window.scrollY/max)*100:0)+'%';
-    nav.classList.toggle('scrolled',window.scrollY>30);
-  };
-  window.addEventListener('scroll',updateScroll,{passive:true});
-  updateScroll();
+  const nav = document.getElementById('nav');
+  if(nav) nav.classList.toggle('scrolled', scrolled > 8);
+}
+document.addEventListener('scroll', updateProgress, { passive:true });
+updateProgress();
 
-  const reveal=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{
+// ============================================================
+// Mobile nav toggle
+// ============================================================
+const navToggle = document.getElementById('navToggle');
+const primaryNav = document.getElementById('primaryNav');
+if(navToggle && primaryNav){
+  navToggle.addEventListener('click', () => {
+    const isOpen = primaryNav.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  primaryNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      primaryNav.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+// ============================================================
+// Scroll reveal
+// ============================================================
+const revealEls = document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
       if(entry.isIntersecting){
-        entry.target.classList.add('visible');
-        reveal.unobserve(entry.target);
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
       }
     });
-  },{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(el=>reveal.observe(el));
-  if(reduce) document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+  }, { threshold:0.15, rootMargin:'0px 0px -60px 0px' });
+  revealEls.forEach(el => io.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add('is-visible'));
+}
 
-  if(!reduce){
-    document.querySelectorAll('[data-tilt]').forEach(card=>{
-      card.addEventListener('mousemove',event=>{
-        const r=card.getBoundingClientRect();
-        const x=(event.clientX-r.left)/r.width-.5;
-        const y=(event.clientY-r.top)/r.height-.5;
-        card.style.transform=`perspective(1400px) rotateX(${-y*1.8}deg) rotateY(${x*1.8}deg) translateY(-4px)`;
+// ============================================================
+// Contact form — progressive enhancement over FormSubmit
+// ============================================================
+const form = document.getElementById('contact-form');
+const statusEl = document.getElementById('form-status');
+const submitLabel = document.getElementById('submit-label');
+
+if(form){
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const honey = form.querySelector('input[name="_honey"]');
+    if(honey && honey.value){ return; } // bot trap
+
+    submitLabel.textContent = 'Sending…';
+    statusEl.textContent = '';
+
+    try{
+      const res = await fetch(form.action, {
+        method:'POST',
+        body:new FormData(form),
+        headers:{ 'Accept':'application/json' }
       });
-      card.addEventListener('mouseleave',()=>{card.style.transform=''});
-    });
-  }
-
-  const form=document.getElementById('contact-form');
-  const status=document.getElementById('form-status');
-  const label=document.getElementById('submit-label');
-  if(form){
-    form.addEventListener('submit',async event=>{
-      event.preventDefault();
-      status.textContent='Sending…';
-      label.textContent='Sending…';
-      try{
-        const response=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{Accept:'application/json'}});
-        const data=await response.json();
-        if(!response.ok||!data.success) throw new Error('Submission failed');
-        status.textContent='Message sent. I’ll get back to you soon.';
+      if(res.ok){
+        submitLabel.textContent = 'Send message';
+        statusEl.textContent = "Thanks — I'll get back to you soon.";
         form.reset();
-      }catch(error){
-        status.textContent='Could not send. Please use the email address on the left.';
-      }finally{
-        label.textContent='Send message';
+      } else {
+        throw new Error('Request failed');
       }
-    });
-  }
-});
+    } catch(err){
+      submitLabel.textContent = 'Send message';
+      statusEl.textContent = 'Something went wrong — email me directly instead.';
+    }
+  });
+}
