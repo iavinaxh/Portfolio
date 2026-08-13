@@ -52,17 +52,47 @@ if('IntersectionObserver' in window){
 
 // ============================================================
 // Contact form
-// FormSubmit handles the POST directly. No fetch/CORS layer.
+// Submit to FormSubmit in the background so the visitor stays
+// on the portfolio instead of being redirected to FormSubmit.
 // ============================================================
 const form = document.getElementById('contact-form');
 const statusEl = document.getElementById('form-status');
 const submitLabel = document.getElementById('submit-label');
 
 if(form){
-  form.addEventListener('submit', () => {
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
     const honey = form.querySelector('input[name="_honey"]');
     if(honey && honey.value) return;
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    if(submitButton) submitButton.disabled = true;
     if(submitLabel) submitLabel.textContent = 'Sending…';
     if(statusEl) statusEl.textContent = 'Sending your message…';
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' }
+      });
+
+      const contentType = response.headers.get('content-type') || '';
+      const data = contentType.includes('application/json')
+        ? await response.json()
+        : null;
+
+      const success = response.ok && (!data || data.success === true || data.success === 'true');
+      if(!success) throw new Error('Form submission failed');
+
+      form.reset();
+      if(statusEl) statusEl.textContent = 'Message sent successfully. I’ll get back to you soon.';
+    } catch(error) {
+      if(statusEl) statusEl.textContent = 'Something went wrong. Please email me directly instead.';
+    } finally {
+      if(submitButton) submitButton.disabled = false;
+      if(submitLabel) submitLabel.textContent = 'Send message';
+    }
   });
 }
