@@ -33,6 +33,7 @@
 
   <nav class="pill-nav" aria-label="Primary navigation" id="primaryNav">
     <span class="pill-avatar" aria-hidden="true">AS</span>
+    <span class="pill-name">Avinash Singh</span>
     <a href="#work">Work</a>
     <a href="#experience">Experience</a>
     <a href="#toolkit">Skills</a>
@@ -69,7 +70,7 @@
     </div>
 
     <div class="hero-sky-content wrap">
-      <p class="hero-eyebrow reveal"><span class="dot"></span> HELLO, I'M AVINASH SINGH. A —</p>
+      <p class="hero-eyebrow reveal"><span class="dot"></span> HELLO, I'M <span class="name">AVINASH SINGH</span>. A —</p>
 
       <h1 class="hero-sky-title reveal">
         <span class="bounce-word">Engineer</span> <span class="bounce-word">who</span>
@@ -134,7 +135,7 @@
       <p>Full-stack builds, AI experiments and academic engineering projects.</p>
     </div>
 
-    <article class="case-study case-main reveal">
+    <article class="case-study case-main reveal" data-project="delhi-ncr">
       <div class="case-visual restaurant-visual">
         <div class="visual-noise"></div>
         <div class="finder-ui">
@@ -152,12 +153,12 @@
         <h3>Delhi NCR<br><i>Restaurant Finder</i></h3>
         <p>A focused discovery platform for finding restaurants and cafés across Delhi NCR, built around searchable venue data, useful filters and budget-aware recommendations.</p>
         <div class="tags"><span>JavaScript</span><span>Search</span><span>Filters</span><span>Vercel</span></div>
-        <div class="case-links"><a href="https://delhi-cafe-hopping.vercel.app/" target="_blank" rel="noreferrer">Open live product <b>↗</b></a><a href="https://github.com/iavinaxh/delhi-cafe-hopping" target="_blank" rel="noreferrer">View source <b>↗</b></a></div>
+        <div class="case-links"><a href="https://delhi-cafe-hopping.vercel.app/" target="_blank" rel="noreferrer">Open live product <b>↗</b></a><a href="https://github.com/iavinaxh/delhi-cafe-hopping" target="_blank" rel="noreferrer">View source <b>↗</b></a><button class="read-more" type="button">Read more <b>+</b></button></div>
       </div>
     </article>
 
     <div class="project-grid">
-      <article class="case-study case-small reveal">
+      <article class="case-study case-small reveal" data-project="text-to-image">
         <div class="case-visual ai-visual">
           <div class="visual-noise"></div>
           <div class="ai-window">
@@ -174,11 +175,11 @@
           <h3>Text-to-Image<br><i>AI Web Application</i></h3>
           <p>A responsive React frontend wired directly into REST APIs and MongoDB, turning text prompts into generated images. I managed the database schema, wrote the frontend–backend integration, and tracked down cross-origin API issues along the way.</p>
           <div class="tags"><span>React.js</span><span>REST APIs</span><span>MongoDB</span></div>
-          <div class="case-links"><a href="https://github.com/iavinaxh/Text_to_image_generator" target="_blank" rel="noreferrer">View source <b>↗</b></a></div>
+          <div class="case-links"><a href="https://github.com/iavinaxh/Text_to_image_generator" target="_blank" rel="noreferrer">View source <b>↗</b></a><button class="read-more" type="button">Read more <b>+</b></button></div>
         </div>
       </article>
 
-      <article class="case-study case-small reveal">
+      <article class="case-study case-small reveal" data-project="vehicle-damage">
         <div class="case-visual damage-visual">
           <div class="scan-ring"></div>
           <div class="scan-copy"><span>DAMAGE SCAN</span><strong>₹ ESTIMATE</strong></div>
@@ -189,11 +190,11 @@
           <h3>Vehicle Damage<br><i>Assessment App</i></h3>
           <p>Full-stack Flask &amp; MySQL app that assesses automobile damage and outputs predictive repair-cost estimates. Tuned the Python-to-Java JSON gateway to keep average response time under 1.5s.</p>
           <div class="tags"><span>Flask</span><span>MySQL</span><span>Java/Python</span></div>
-          <div class="case-links"><a href="https://github.com/iavinaxh/Vehicle_damage_detection" target="_blank" rel="noreferrer">View source <b>↗</b></a></div>
+          <div class="case-links"><a href="https://github.com/iavinaxh/Vehicle_damage_detection" target="_blank" rel="noreferrer">View source <b>↗</b></a><button class="read-more" type="button">Read more <b>+</b></button></div>
         </div>
       </article>
 
-      <article class="case-study case-small reveal">
+      <article class="case-study case-small reveal" data-project="wellness">
         <div class="case-visual work-visual">
           <div class="work-copy">QORI<br><i>+ HealThyRam</i></div>
           <div class="work-bars"><span></span><span></span><span></span><span></span></div>
@@ -203,11 +204,11 @@
           <h3>Wellness Platform<br><i>Plugins &amp; Features</i></h3>
           <p>WordPress plugins and full-stack features for the QORI Wellness Dashboard and HealThyRam, with third-party API integration validated end-to-end in Postman.</p>
           <div class="tags"><span>WordPress</span><span>PHP</span><span>REST APIs</span></div>
-          <div class="case-links"><a href="#experience">Read about the role <b>↓</b></a></div>
+          <div class="case-links"><a href="#experience">Read about the role <b>↓</b></a><button class="read-more" type="button">Read more <b>+</b></button></div>
         </div>
       </article>
 
-      <article class="case-study case-small reveal">
+      <article class="case-study case-small reveal" data-project="portfolio">
         <div class="case-visual portfolio-visual">
           <div class="pf-browser">
             <div class="pf-bar"><span></span><span></span><span></span><b>avinash-portfolio-woad.vercel.app</b></div>
@@ -223,11 +224,26 @@
           <h3>Personal<br><i>Portfolio Website</i></h3>
           <p>This site — an editorial, resume-driven portfolio built from scratch with vanilla HTML, CSS and JS, deployed on Vercel and shipped straight from GitHub.</p>
           <div class="tags"><span>HTML/CSS</span><span>JavaScript</span><span>Vercel</span></div>
-          <div class="case-links"><a href="https://avinash-portfolio-woad.vercel.app/" target="_blank" rel="noreferrer">Open live site <b>↗</b></a><a href="https://github.com/iavinaxh/Portfolio" target="_blank" rel="noreferrer">View source <b>↗</b></a></div>
+          <div class="case-links"><a href="https://avinash-portfolio-woad.vercel.app/" target="_blank" rel="noreferrer">Open live site <b>↗</b></a><a href="https://github.com/iavinaxh/Portfolio" target="_blank" rel="noreferrer">View source <b>↗</b></a><button class="read-more" type="button">Read more <b>+</b></button></div>
         </div>
       </article>
     </div>
   </section>
+
+  <!-- PROJECT MODAL -->
+  <div class="project-modal" id="projectModal" aria-hidden="true">
+    <div class="project-modal-backdrop" data-close></div>
+    <div class="project-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="project-modal-close" data-close aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="project-modal-meta" id="modalMeta"></div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalBody"></p>
+      <div class="tags" id="modalTags"></div>
+      <div class="case-links" id="modalLinks"></div>
+    </div>
+  </div>
 
   <!-- EXPERIENCE -->
   <section class="section experience wrap" id="experience">
