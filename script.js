@@ -246,3 +246,112 @@ if(form){
     }
   });
 }
+
+// ============================================================
+// Project modal — click a project card to read more about it
+// ============================================================
+(function(){
+  const modal = document.getElementById('projectModal');
+  if(!modal) return;
+  const metaEl = document.getElementById('modalMeta');
+  const titleEl = document.getElementById('modalTitle');
+  const bodyEl = document.getElementById('modalBody');
+  const tagsEl = document.getElementById('modalTags');
+  const linksEl = document.getElementById('modalLinks');
+
+  const projects = {
+    'delhi-ncr': {
+      meta: ['Personal project', 'Live'],
+      title: 'Delhi NCR Restaurant Finder',
+      body: "A focused discovery platform for finding restaurants and cafés across Delhi NCR. Built the search and filtering logic from scratch — cuisine, budget, and locality filters that narrow results instantly without a page reload.\n\nThe goal was to keep it fast and genuinely useful rather than a generic listings clone: sensible defaults, budget-aware recommendations, and a clean venue layout that works well on mobile where most people would actually use it.",
+      tags: ['JavaScript', 'Search', 'Filters', 'Vercel'],
+      links: [
+        { label: 'Open live product', url: 'https://delhi-cafe-hopping.vercel.app/' },
+        { label: 'View source', url: 'https://github.com/iavinaxh/delhi-cafe-hopping' }
+      ]
+    },
+    'text-to-image': {
+      meta: ['AI + Full Stack', 'Personal'],
+      title: 'Text-to-Image AI Web Application',
+      body: "A responsive React frontend wired directly into REST APIs and MongoDB, turning text prompts into generated images. I designed the database schema for storing prompts and generation history, and wrote the frontend–backend integration end to end.\n\nA good chunk of the real work was debugging cross-origin API issues between the React client and the generation backend, plus handling slow-response states gracefully so the UI never feels stuck.",
+      tags: ['React.js', 'REST APIs', 'MongoDB', 'JavaScript'],
+      links: [
+        { label: 'View source', url: 'https://github.com/iavinaxh/Text_to_image_generator' }
+      ]
+    },
+    'vehicle-damage': {
+      meta: ['AI + Full Stack', 'Academic'],
+      title: 'Vehicle Damage Assessment App',
+      body: "A full-stack Flask & MySQL application that assesses automobile damage from input data and outputs predictive repair-cost estimates. The interesting engineering problem here was the Python-to-Java JSON gateway connecting the assessment model to the rest of the stack.\n\nI tuned that gateway to keep average response time under 1.5 seconds, which mattered because the app was meant to feel closer to an instant quote than a batch job.",
+      tags: ['Flask', 'MySQL', 'Java', 'Python'],
+      links: [
+        { label: 'View source', url: 'https://github.com/iavinaxh/Vehicle_damage_detection' }
+      ]
+    },
+    'wellness': {
+      meta: ['Professional', 'Live'],
+      title: 'Wellness Platform — Plugins & Features',
+      body: "At Virtual Studio Private Ltd., I build and customize WordPress plugins and full-stack features for the QORI Wellness Dashboard and the HealThyRam platform. This spans everything from plugin logic to integrating third-party APIs into the dashboard.\n\nEvery API workflow gets validated end-to-end in Postman before it ships, and a good part of the role is diagnosing production issues across PHP, JavaScript, SQL and the API layer connecting them.",
+      tags: ['WordPress', 'PHP', 'REST APIs'],
+      links: [
+        { label: 'Read about the role', url: '#experience' }
+      ]
+    },
+    'portfolio': {
+      meta: ['Personal', 'Live'],
+      title: 'Personal Portfolio Website',
+      body: "This site — an editorial, resume-driven portfolio built from scratch with vanilla HTML, CSS and JavaScript, no framework. Every section is generated from my actual résumé data rather than placeholder content.\n\nIt includes a day/night themed hero, a dark/light mode toggle, scroll-triggered reveal animations, and this very modal you're reading right now. Deployed on Vercel, shipped straight from GitHub.",
+      tags: ['HTML/CSS', 'JavaScript', 'Vercel'],
+      links: [
+        { label: 'Open live site', url: 'https://avinash-portfolio-woad.vercel.app/' },
+        { label: 'View source', url: 'https://github.com/iavinaxh/Portfolio' }
+      ]
+    }
+  };
+
+  let lastFocused = null;
+
+  function openModal(id){
+    const data = projects[id];
+    if(!data) return;
+    metaEl.innerHTML = data.meta.map(m => `<span>${m}</span>`).join('');
+    titleEl.textContent = data.title;
+    bodyEl.textContent = data.body;
+    tagsEl.innerHTML = data.tags.map(t => `<span>${t}</span>`).join('');
+    linksEl.innerHTML = data.links.map(l =>
+      `<a href="${l.url}" ${l.url.startsWith('#') ? '' : 'target="_blank" rel="noreferrer"'}>${l.label} <b>↗</b></a>`
+    ).join('');
+
+    lastFocused = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => modal.querySelector('.project-modal-close').focus());
+  }
+
+  function closeModal(){
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.case-study[data-project]').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if(e.target.closest('a')) return; // let real links behave normally
+      if(e.target.closest('.read-more')){
+        openModal(card.getAttribute('data-project'));
+        return;
+      }
+      openModal(card.getAttribute('data-project'));
+    });
+  });
+
+  modal.querySelectorAll('[data-close]').forEach(el => {
+    el.addEventListener('click', closeModal);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+  });
+})();
