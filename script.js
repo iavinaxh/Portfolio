@@ -182,15 +182,27 @@ if(skillsTabBtn && toolsTabBtn && skillsPanel && toolsPanel){
     }
   }
 
-  playBtn.addEventListener('click', () => {
+  function vibrate(pattern){
+    if('vibrate' in navigator){
+      try{ navigator.vibrate(pattern); }catch(e){}
+    }
+  }
+
+  function togglePlayback(){
     if(!audioCtx || ended){
       startFresh();
+      vibrate(15);
     } else if(playing){
       pausePlayback();
+      vibrate(12);
     } else {
       resumePlayback();
+      vibrate(15);
     }
-  });
+  }
+
+  // clicking anywhere on the player (not just the button) toggles play/pause
+  player.addEventListener('click', togglePlayback);
 })();
 
 // ============================================================
