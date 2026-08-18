@@ -518,21 +518,6 @@ i{ font-family:var(--serif); font-style:italic; font-weight:500; color:var(--gol
 .shot-bar b{ margin-left:8px; font-family:var(--mono); font-weight:400; font-size:11px; color:var(--ink-faint); }
 .shot-browser img{ display:block; width:100%; height:auto; }
 
-/* personal portfolio visual */
-.portfolio-visual{ display:flex; align-items:center; justify-content:center; padding:22px; }
-.pf-browser{ width:100%; background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
-.pf-bar{ display:flex; align-items:center; gap:8px; padding:12px 14px; border-bottom:1px solid var(--line); font-family:var(--mono); font-size:10.5px; color:var(--ink-faint); }
-.pf-bar span{ width:8px; height:8px; border-radius:50%; background:var(--line); }
-.pf-bar b{ margin-left:6px; color:var(--ink-soft); font-weight:500; }
-.pf-body{ padding:22px; display:flex; flex-direction:column; gap:12px; }
-.pf-line{ height:10px; border-radius:6px; background:var(--cream-2); }
-.pf-line.long{ width:80%; }
-.pf-line.short{ width:45%; }
-.pf-line.accent{ background:var(--gold); opacity:.7; }
-.pf-dots{ display:flex; gap:8px; margin-top:8px; }
-.pf-dots span{ width:14px; height:14px; border-radius:50%; }
-.pf-dots span:nth-child(1){ background:var(--gold); } .pf-dots span:nth-child(2){ background:var(--sky); } .pf-dots span:nth-child(3){ background:var(--sage); }
-
 /* contact */
 .contact-section{ background:var(--contrast-bg); color:var(--contrast-text); padding:120px 32px; }
 .contact-section .section-label{ color:rgba(253,246,233,.5); }
