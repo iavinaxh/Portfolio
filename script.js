@@ -288,6 +288,7 @@ if(form){
       body: "A responsive React frontend wired directly into REST APIs and MongoDB, turning text prompts into generated images. I designed the database schema for storing prompts and generation history, and wrote the frontend–backend integration end to end.\n\nA good chunk of the real work was debugging cross-origin API issues between the React client and the generation backend, plus handling slow-response states gracefully so the UI never feels stuck.",
       tags: ['React.js', 'REST APIs', 'MongoDB', 'JavaScript'],
       links: [
+        { label: 'Open live product', url: 'https://imagify-zeta-sepia.vercel.app/' },
         { label: 'View source', url: 'https://github.com/iavinaxh/Text_to_image_generator' }
       ]
     },
